@@ -1,1 +1,29 @@
+name: Auto Update Release
+
+on:
+  schedule:
+    # Запуск каждые 3 часа
+    - cron: '0 */3 * * *'
+  # Позволяет запускать скрипт вручную для проверки
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download file
+        run: |
+          curl -L -o Installer-x64-v3.1.zip "https://hadescheats.cc/Installer-x64-v3.1"
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest Release
+          files: Installer-x64-v3.1.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
